@@ -17,3 +17,9 @@ let input = document.getElementById("input");
 
 // }
 
+// When we press the AC button, input.value = 0
+let ac = document.getElementById("ac");
+ac.onclick = function() {
+    input.value = 0;
+}
+
