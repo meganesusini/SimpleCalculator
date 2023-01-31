@@ -5,5 +5,9 @@ let calculation = "";
 WHILE we DON'T press the equal button THEN :
     IF ONCLICK a button THEN :
         calculation += button.value;
+        input.value = calculation;
 
-input.value = calculation;
+For the calculation
+
+Create the functions which make a calculation depending on the operator
+

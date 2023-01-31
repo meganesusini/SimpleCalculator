@@ -3,19 +3,7 @@
 let nbCollection = document.getElementsByClassName("btn btn-light waves-effect");
 let input = document.getElementById("input");
 
-// for (let i=0; i< nbCollection.length; i++) {
-//     nbCollection[i].onclick = function() {
-//         input.value = nbCollection[i].value;
-//     }
-// }
-
 let opeCollection = document.getElementsByClassName("operator btn btn-info");
-
-// When we press the equals button, the result is displayed
-let equal = document.getElementById("equal");
-// equal.onclick = function() {
-
-// }
 
 // When we press the AC button, input.value = 0
 let ac = document.getElementById("ac");
@@ -44,3 +32,29 @@ for (let i=0; i<opeAndNbCollection.length; i++) {
     }
 }
 
+// When we press the equals button, the calculation is deleted
+let equal = document.getElementById("equal");
+equal.onclick = function() {
+    calculation = "";
+    input.value = 0;
+}
+
+// function add
+function add(nb1,nb2) {
+    return (nb1+nb2);
+}
+
+// function sub
+function sub(nb1,nb2) {
+    return (nb1-nb2);
+}
+
+// function mult
+function mult(nb1,nb2) {
+    return (nb1*nb2);
+}
+
+// function div
+function add(nb1,nb2) {
+    return (nb1/nb2);
+}
