@@ -11,3 +11,14 @@ For the calculation
 
 Create the functions which make a calculation depending on the operator
 
+Create an function which detect the * or the /
+
+For example : 1+2*1*2-1
+We need to :
+- find the index of all the operators :
+    here : [+1 : 1, *2 : 3, *3: 5, -4 : 7]
+- find the * or the /
+    here : [*2 : 3]
+- find if there is an operator before this *2 -> search if there is a value less than the 2* value
+    - if there is a value less than the 2* value then :
+        select the calculation by : calculation[]
