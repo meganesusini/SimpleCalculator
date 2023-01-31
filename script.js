@@ -167,36 +167,104 @@ function findOperator(calculation) {
     }
 }
 
+// Function which count the * or / operators
+function countMultOrDivOpe(calculation) {
+    let nb = 0;
+    let operatorsArray = ["*", "/"];
+    for (let i=0; i<calculation.length; i++) {
+        if (operatorsArray.includes(calculation[i])) {
+            nb += 1;
+        }
+    }
+    return nb;
+}
+
+// Function which calculate from left to right
+function simpleOperation(calculation) {
+    let nbOfOpe = countOperators(calculation);
+    console.log("Nb of operators = " + nbOfOpe);
+    let result, theNextOpe, theCalculPart;
+    if (nbOfOpe == 1) {
+        console.log("There is ONE operator");
+        result = operation(calculation, findOperator(calculation), 0, calculation.length);
+    }
+    else {
+        console.log("There is MANY operators");
+        while (nbOfOpe > 0) {
+            if(nbOfOpe == 1) {
+                console.log("There is ONE ope :_")
+                result = operation(calculation, findOperator(calculation), 0, calculation.length);
+                console.log("The result is : " + result);
+                nbOfOpe -= 1;
+            }
+            else {
+                console.log("We search the next operator :_");
+                theNextOpe = checkNextOperator(calculation, calculation.indexOf(findOperator(calculation)));
+                console.log("The next ope is at the index : " + theNextOpe);
+                theCalculPart = calculation.substring(0,theNextOpe);
+                console.log("The part of the calculation is : " + theCalculPart);
+                result = operation(theCalculPart, findOperator(theCalculPart),0,theCalculPart.length);
+                console.log("The result is : " + result);
+                calculation = result.toString() + calculation.substr(theCalculPart.length,calculation.length);
+                console.log("The new calculation is : " + calculation);
+                nbOfOpe -= 1;
+                console.log("The nb of operators is : " + nbOfOpe);
+            }
+            
+        }
+    }
+    return result;
+}
+
 // console.log(countOperators(calculation));
 
 // let calculation = "1+5.31561652*1*2-1";
-let calculation = "15.31561652*12*2-1";
+// let calculation = "15.31561652*12*2-1";
 let result;
 let calculationPart;
-// let calculation = "1+5";
+let calculation = "1+5+1+1-5";
 console.log("The calculation : " + calculation);
+console.log("res : " + simpleOperation(calculation))
 
-let opeNbFromCalculation = countOperators(calculation);
-console.log("The number of operators : " + opeNbFromCalculation);
+// let opeNbFromCalculation = countOperators(calculation);
+// console.log("The number of operators : " + opeNbFromCalculation);
+// let multDivOpeFromCalculation = countMultOrDivOpe(calculation);
+// console.log("The number of mult or div operators : " + multDivOpeFromCalculation);
 
-if (opeNbFromCalculation == 1) {
-    console.log("Cas 1 -> résultat de l'opération" + operation(calculation, findOperator(calculation), 0, calculation.length));
-}
-else {
-    console.log("Cas 2 :");
-    let multOrDivOpe = checkMultOrDivOpe(calculation,0,calculation.length);
-    console.log("The index of the operator * or / : " + multOrDivOpe);
-    console.log("We check if there is an other operator before this operator :");
-    if (checkPreviousOperator(calculation,multOrDivOpe) == -1) {
-        console.log("If there isn't an ope before this one, we check if there is an ope after this one :");
-        let theNextOpe = checkNextOperator(calculation,multOrDivOpe);
-        console.log("Index of the next operator : " + theNextOpe);
-        calculationPart = calculation.substr(0,theNextOpe);
-        console.log("We select a part of the calculation : " + calculationPart);
-        result = operation(calculationPart, findOperator(calculationPart), 0, calculationPart.length);
-        console.log("We do the operation and the result is : " + result);
-        calculation = result + calculation.substring(calculationPart.length, calculation.length);
-        console.log("The new calculation : " + calculation);
-    }
-}
+// // while (opeNbFromCalculation > 0) {
+//     if (opeNbFromCalculation == 1) {
+//         result = operation(calculation, findOperator(calculation), 0, calculation.length);
+//         console.log("Case 1 -> the result of the operation is : " + result);
+//         calculation = result;
+//         opeNbFromCalculation = 0;
+//     }
+//     else {
+//         console.log("Case 2 :");
+//         let multOrDivOpeIndex = checkMultOrDivOpe(calculation,0,calculation.length);
+//         // if (multOrDivOpeIndex == -1) {
+
+//         // }
+//         console.log("The index of the operator * or / : " + multOrDivOpeIndex);
+//         console.log("We check if there is an other operator before this operator :");
+//         if (checkPreviousOperator(calculation,multOrDivOpeIndex) == -1) {
+//             console.log("If there isn't an ope before this one, we check if there is an ope after this one :");
+//             let theNextOpe = checkNextOperator(calculation,multOrDivOpeIndex);
+//             console.log("Index of the next operator : " + theNextOpe);
+//             calculationPart = calculation.substr(0,theNextOpe);
+//             console.log("We select a part of the calculation : " + calculationPart);
+//             result = operation(calculationPart, findOperator(calculationPart), 0, calculationPart.length);
+//             console.log("We do the operation and the result is : " + result);
+//             calculation = result + calculation.substring(calculationPart.length, calculation.length);
+//             console.log("The new calculation : " + calculation);
+
+//             opeNbFromCalculation -= 1;
+//             console.log("Number of operators : " + opeNbFromCalculation);
+//             multDivOpeFromCalculation -= 1;
+//             console.log("The number of mult or div operators : " + multDivOpeFromCalculation);
+
+//         }
+//     }
+// // }
+console.log("end");
+
 
