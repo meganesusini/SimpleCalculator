@@ -1,0 +1,9 @@
+IF we press the AC button THEN input.value = 0
+
+let calculation = "";
+
+WHILE we DON'T press the equal button THEN :
+    IF ONCLICK a button THEN :
+        calculation += button.value;
+
+input.value = calculation;

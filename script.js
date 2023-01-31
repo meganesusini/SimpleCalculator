@@ -3,8 +3,17 @@
 let nbCollection = document.getElementsByClassName("btn btn-light waves-effect");
 let input = document.getElementById("input");
 
-for (let i=0; i<= nbCollection.length; i++) {
-    nbCollection[i].onclick = function() {
-        input.value = nbCollection[i].value;
-    }
-}
+// for (let i=0; i<= nbCollection.length; i++) {
+//     nbCollection[i].onclick = function() {
+//         input.value = nbCollection[i].value;
+//     }
+// }
+
+// let opeCollection = document.getElementsByClassName("operator btn btn-info");
+
+// When we press the equals button, the result is displayed
+// let equal = document.getElementById("equal");
+// equal.onclick = function() {
+
+// }
+
