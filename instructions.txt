@@ -15,10 +15,42 @@ Create an function which detect the * or the /
 
 For example : 1+2*1*2-1
 We need to :
-- find the index of all the operators :
-    here : [+1 : 1, *2 : 3, *3: 5, -4 : 7]
-- find the * or the /
-    here : [*2 : 3]
-- find if there is an operator before this *2 -> search if there is a value less than the 2* value
-    - if there is a value less than the 2* value then :
-        select the calculation by : calculation[]
+- how many operators there are :
+    - if there is one operator -> do the calculation
+    - else :
+        - check if there is an ope * or / :
+            - if no :
+                - select the operation from the beggining to the second index ope-1
+                - do the calculation
+                - var calculation = result + [index ope to end]
+                - check if there is an other ope
+                    - if yes :
+                        - repeat the precedent operation
+                    - if no :
+                        - do the calculation
+            - if yes :
+                - check if the ope is the first ope :
+                    - if yes :
+                        - select the operation from the beggining to the second index ope-1
+                        - do the calculation
+                        - var calculation = result + [index ope to end]
+                        - check if there is an other ope * or / :
+                            - if no :
+                                - repeat the precendent operation
+                            if yes :
+                                - check if the ope is the first ope :
+                                    - if yes -> repeat the precedent operation
+                                    - if no :
+                                        - select the index of the precedent ope
+                                        - add +1 to the index
+                                        - check if there is an ope after your * or / ope :
+                                            - if no : 
+                                                - select the operation from the beggining to the second index ope-1
+                                                - do the calculation
+                                                - var calculation = result + [index ope to end]
+                                                - then :
+                                                - select the operation from the beggining to the second index ope-1
+                                                - do the calculation
+                                                - var calculation = result + [index ope to end]
+                                                - check if there is an other ope * or / :
+                                            i
