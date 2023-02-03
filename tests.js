@@ -17,6 +17,8 @@ let calculationArray; // typeof calculationArray > array()
 let nbCollection = document.getElementsByClassName("btn btn-light waves-effect"); // select the numbers
 let opeCollection = document.getElementsByClassName("operator btn btn-info"); // select the operators
 
+let operatorsArray = ["+","-","/","*"];
+
 // We stock the operators and the numbers in an only collection
 let opeAndNbCollection = Array();
 
@@ -49,24 +51,14 @@ point.onclick = function() {
 for (let i=0; i<opeAndNbCollection.length; i++) {
     opeAndNbCollection[i].onclick = function() {
         // If the button pressed is an ope > check if there is not an other ope at the end of the calculation
-        if (["+","-","*","/"].includes(opeAndNbCollection[i].value)) {
+        if (operatorsArray.includes(opeAndNbCollection[i].value)) {
             // If there is an ope at the end of the calculation > replace the previous ope by the new one
-            if (["+","-","*","/"].includes(calculation[calculation.length-1])) {
-                calculationArray = calculation.split("");
-                calculationArray[calculationArray.length-1] = opeAndNbCollection[i].value.toString();
-                calculation = calculationArray.join("");
-                input.value = calculation;
-            }
-            else {
-                calculation += opeAndNbCollection[i].value.toString();
-                input.value = calculation;
+            if (operatorsArray.includes(calculation[calculation.length-1])) {
+                calculation = calculation.substring(0, calculation.length-1)
             }
         }
-        else {
-            calculation += opeAndNbCollection[i].value.toString();
-            input.value = calculation;
-        }
-        
+        calculation += opeAndNbCollection[i].value.toString();
+        input.value = calculation;
     }
 }
 
@@ -81,24 +73,16 @@ equal.onclick = function() {
 }
 
 // function add
-function add(nb1,nb2) {
-    return (parseFloat(nb1)+parseFloat(nb2));
-}
+function add(nb1,nb2) {return (parseFloat(nb1)+parseFloat(nb2));}
 
 // function sub
-function sub(nb1,nb2) {
-    return (parseFloat(nb1)-parseFloat(nb2));
-}
+function sub(nb1,nb2) {return (parseFloat(nb1)-parseFloat(nb2));}
 
 // function mult
-function mult(nb1,nb2) {
-    return (parseFloat(nb1)*parseFloat(nb2));
-}
+function mult(nb1,nb2) {return (parseFloat(nb1)*parseFloat(nb2));}
 
 // function div
-function div(nb1,nb2) {
-    return (parseFloat(nb1)/parseFloat(nb2));
-}
+function div(nb1,nb2) {return (parseFloat(nb1)/parseFloat(nb2));}
 
 // function which do the operation
 function operation(calculation, operator, fromIndex, toIndex) {
@@ -123,45 +107,28 @@ function operation(calculation, operator, fromIndex, toIndex) {
 // Return -1 if there isn't an ope after this ope
 // Return the index of the ope if there is an ope after this ope
 function checkNextOperator(calculation, indexOperator) {
-    let newCalculation = calculation.substr(indexOperator+1); // select a part of the calculation from indexOperator+1 to the end
+    let newCalculation = calculation.substr(indexOperator+1);
     let thereIsOtherOpe = -1;
-    let operatorsArray = ["*", "/", "+", "-"];
-    for (let i=0; i<operatorsArray.length; i++) { // for each ope 
-        if (newCalculation.indexOf(operatorsArray[i]) != -1) { // if there is an other ope after this one
-            thereIsOtherOpe = newCalculation.indexOf(operatorsArray[i]); // select the index of this other ope
-            break;
-        }
+    
+    if (operatorsArray.includes(findOperator(newCalculation))) { // if there is an other ope after this one
+        thereIsOtherOpe = newCalculation.indexOf(findOperator(newCalculation));;
     }
-    if (thereIsOtherOpe != -1) { // if there is an other ope
-        thereIsOtherOpe = calculation.substr(0,indexOperator+1).length + thereIsOtherOpe; // we recalculate the index of the other ope according to the entire calculation
+    if (thereIsOtherOpe != -1) {
+        thereIsOtherOpe = calculation.substr(0,indexOperator+1).length + thereIsOtherOpe;
     }
     
     return thereIsOtherOpe;
 }
-
-// function checkNextOperator(calculation, indexOperator) {
-//     let newCalculation = calculation.substr(indexOperator+1);
-//     let thereIsOtherOpe = -1;
-    
-//     if (["*", "/", "+", "-"].includes(findOperator(newCalculation))) { // if there is an other ope after this one
-//         thereIsOtherOpe = newCalculation.indexOf(findOperator(newCalculation));;
-//     }
-//     if (thereIsOtherOpe != -1) {
-//         thereIsOtherOpe = calculation.substr(0,indexOperator+1).length + thereIsOtherOpe;
-//     }
-    
-//     return thereIsOtherOpe;
-// }
 
 
 // Function which check if there is an ope before an ope
 // Return -1 if there isn't an ope before this ope
 // Return the index of the ope if there is an ope before this ope
 function checkPreviousOperator(calculation, indexOperator) {
-    let newCalculation = calculation.substr(0,indexOperator); 
+    let newCalculation = calculation.substr(0,indexOperator); // select a part of the calculation from the beggining to indexOperator-1
     let thereIsOtherOpe = -1;
-    let operatorsArray = ["*", "/", "+", "-"];
-    for (let i=0; i<newCalculation.length; i++) {
+    // let operatorsArray = ["*", "/", "+", "-"];
+    for (let i=0; i<newCalculation.length; i++) { // for each character of the calculation from the end of newCalculation to the beggining
         if (operatorsArray.includes(newCalculation[newCalculation.length -(i+1)])) {
             thereIsOtherOpe = newCalculation.length -(i+1);
             break;
@@ -174,12 +141,10 @@ function checkPreviousOperator(calculation, indexOperator) {
 // Return -1 if there isn't an ope * or /
 // Return the index of the ope if there is an ope * or /
 function checkMultOrDivOpe(calculation, fromIndex, toIndex) {
-    let newCalculation1 = calculation.substr(0, toIndex); 
-    let newCalculation2 = newCalculation1.substr(fromIndex);
+    let newCalculation = calculation.substring(fromIndex,toIndex);
     let thereIsOtherOpe = -1;
-    let operatorsArray = ["*", "/"];
-    for (let i=0; i<newCalculation2.length; i++) {
-        if (operatorsArray.includes(newCalculation2[i])) {
+    for (let i=0; i<newCalculation.length; i++) {
+        if (["*", "/"].includes(newCalculation[i])) {
             thereIsOtherOpe = i;
             break;
         }
@@ -190,7 +155,6 @@ function checkMultOrDivOpe(calculation, fromIndex, toIndex) {
 // Function which count how many operators there are
 function countOperators(calculation) {
     let opeNb = 0;
-    let operatorsArray = ["*", "/", "+", "-"];
     for (let i=0; i<calculation.length; i++) {
         if (operatorsArray.includes(calculation[i])) {
             opeNb += 1;
@@ -201,7 +165,6 @@ function countOperators(calculation) {
 
 // Function which finds an operator -> return the operator symbol
 function findOperator(calculation) {
-    let operatorsArray = ["*", "/", "+", "-"];
     for (let i=0; i<calculation.length; i++) {
         if (operatorsArray.includes(calculation[i])) {
             return calculation[i];
@@ -212,9 +175,8 @@ function findOperator(calculation) {
 // Function which count the * or / operators
 function countMultOrDivOpe(calculation) {
     let nb = 0;
-    let operatorsArray = ["*", "/"];
     for (let i=0; i<calculation.length; i++) {
-        if (operatorsArray.includes(calculation[i])) {
+        if (["*", "/"].includes(calculation[i])) {
             nb += 1;
         }
     }
@@ -291,6 +253,9 @@ function calculate(calculation) {
                 // WHILE the number of div or mult ope > 0
                 while (opeNbFromCalculation > 1) {
                     console.log("WHILE 2");
+
+                    multOrDivOpeIndex = checkMultOrDivOpe(calculation,0,calculation.length);
+                    console.log("INDEX of the mult or div ope = " + multOrDivOpeIndex);
                     // CHECK if there is an ope BEFORE this one
                     thePreviousOpe = checkPreviousOperator(calculation,multOrDivOpeIndex);
                     console.log("Index of thePreviousOpe = " + thePreviousOpe);
