@@ -45,6 +45,7 @@ let theResult;
 equal.onclick = function() {
     theResult = calculate(calculation);
     input.value = theResult;
+    calculation = "";
 }
 
 // function add
