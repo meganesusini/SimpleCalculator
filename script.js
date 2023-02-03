@@ -1,45 +1,51 @@
-// // Allows to only display the numbers on the calculator
+// Allows to only display the numbers on the calculator
 
-// let nbCollection = document.getElementsByClassName("btn btn-light waves-effect");
-// let input = document.getElementById("input");
+let nbCollection = document.getElementsByClassName("btn btn-light waves-effect");
+let input = document.getElementById("input");
 
-// let opeCollection = document.getElementsByClassName("operator btn btn-info");
+let opeCollection = document.getElementsByClassName("operator btn btn-info");
 
-// // When we press the AC button, input.value = 0
-// let ac = document.getElementById("ac");
-// ac.onclick = function() {
-//     input.value = 0;
-// }
+// When we press the AC button, input.value = 0
+let ac = document.getElementById("ac");
+ac.onclick = function() {
+    input.value = 0;
+}
 
-// let calculation = "";
+// When we press the point button, this value is added to the calculation
+let point = document.getElementById("point");
+point.onclick = function() {
+    calculation += point.value;
+    input.value = calculation;
+}
 
-// // We stock the operators and the numbers in an only collection
-// let opeAndNbCollection = Array();
+let calculation = "";
 
-// for (let i=0; i<opeCollection.length; i++) {
-//     opeAndNbCollection.push(opeCollection[i]);
-// }
+// We stock the operators and the numbers in an only collection
+let opeAndNbCollection = Array();
 
-// for (let i=0; i<nbCollection.length; i++) {
-//     opeAndNbCollection.push(nbCollection[i]);
-// }
+for (let i=0; i<opeCollection.length; i++) {
+    opeAndNbCollection.push(opeCollection[i]);
+}
 
-// // When we press the operators button or the numbers button, their value is added to the calculation
-// for (let i=0; i<opeAndNbCollection.length; i++) {
-//     opeAndNbCollection[i].onclick = function() {
-//         calculation += opeAndNbCollection[i].value;
-//         input.value = calculation;
-//     }
-// }
+for (let i=0; i<nbCollection.length; i++) {
+    opeAndNbCollection.push(nbCollection[i]);
+}
 
-// // When we press the equals button, the calculation is deleted
-// let equal = document.getElementById("equal");
-// equal.onclick = function() {
-//     // calculation = "";
-//     // input.value = 0;
-//     console.log(calculation);
+// When we press the operators button or the numbers button, their value is added to the calculation
+for (let i=0; i<opeAndNbCollection.length; i++) {
+    opeAndNbCollection[i].onclick = function() {
+        calculation += opeAndNbCollection[i].value;
+        input.value = calculation;
+    }
+}
 
-// }
+// When we press the equals button, we do the calculation > the result is displayed
+let equal = document.getElementById("equal");
+let theResult;
+equal.onclick = function() {
+    theResult = calculate(calculation);
+    input.value = theResult;
+}
 
 // function add
 function add(nb1,nb2) {
@@ -196,101 +202,102 @@ function simpleOperation(calculation) {
     return result;
 }
 
-let calculation = "12.5+5*1/2";
+// let calculation = "12.5+5*1/2";
+// let opeNbFromCalculation, multDivOpeFromCalculation, theNextOpe, thePreviousOpe, multOrDivOpeIndex;
+function calculate(calculation) {
+    let opeNbFromCalculation = countOperators(calculation);
+    let multDivOpeFromCalculation = countMultOrDivOpe(calculation);
+    let theNextOpe, thePreviousOpe, multOrDivOpeIndex;
 
-let opeNbFromCalculation = countOperators(calculation);
-let multDivOpeFromCalculation = countMultOrDivOpe(calculation);
-let theNextOpe, thePreviousOpe, multOrDivOpeIndex;
+    // WHILE the number of ope > 0
+    while (opeNbFromCalculation > 0) {
 
-// WHILE the number of ope > 0
-while (opeNbFromCalculation > 0) {
-
-    // IF there is ONE OPE > display result > end
-    if (opeNbFromCalculation == 1) {
-        result = operation(calculation, findOperator(calculation), 0, calculation.length);
-        console.log("The result of the operation is : " + result);
-        calculation = result;
-        opeNbFromCalculation = 0;
-    }
-    // IF there is MANY OPE
-    else {
-        // CHECK if there is a DIV OR MULT OPE
-        multOrDivOpeIndex = checkMultOrDivOpe(calculation,0,calculation.length);
-
-        // IF there is NOT MULT OR DIV OPE > one calc > display result > end
-        if (multOrDivOpeIndex == -1) {
-            result = simpleOperation(calculation);
+        // IF there is ONE OPE > display result > end
+        if (opeNbFromCalculation == 1) {
+            result = operation(calculation, findOperator(calculation), 0, calculation.length);
+            console.log("The result of the operation is : " + result);
             calculation = result;
             opeNbFromCalculation = 0;
-            console.log("The result of the operation is : " + result);
         }
-        // IF there is AT LEAST ONE DIV OR MULT OPE
+        // IF there is MANY OPE
         else {
-            // WHILE the number of div or mult ope > 0
-            while (multDivOpeFromCalculation > 0) {
-                // CHECK if there is an ope BEFORE this one
+            // CHECK if there is a DIV OR MULT OPE
+            multOrDivOpeIndex = checkMultOrDivOpe(calculation,0,calculation.length);
 
-                // IF there is NOT an ope BEFORE this one
-                if (checkPreviousOperator(calculation,multOrDivOpeIndex) == -1) {
-                    // SO, there is AT LEAST ONE ope AFTER this one > SELECT this ope
+            // IF there is NOT MULT OR DIV OPE > one calc > display result > end
+            if (multOrDivOpeIndex == -1) {
+                result = simpleOperation(calculation);
+                calculation = result;
+                opeNbFromCalculation = 0;
+                console.log("The result of the operation is : " + result);
+            }
+            // IF there is AT LEAST ONE DIV OR MULT OPE
+            else {
+                // WHILE the number of div or mult ope > 0
+                while (multDivOpeFromCalculation > 0) {
+                    // CHECK if there is an ope BEFORE this one
 
-                    theNextOpe = checkNextOperator(calculation,multOrDivOpeIndex);
+                    // IF there is NOT an ope BEFORE this one
+                    if (checkPreviousOperator(calculation,multOrDivOpeIndex) == -1) {
+                        // SO, there is AT LEAST ONE ope AFTER this one > SELECT this ope
 
-                    // SELECT the part of the calc from 0 to theNextOpe > DO A CALCULATION
+                        theNextOpe = checkNextOperator(calculation,multOrDivOpeIndex);
 
-                    calculationPart = calculation.substring(0,theNextOpe);
+                        // SELECT the part of the calc from 0 to theNextOpe > DO A CALCULATION
 
-                    result = operation(calculationPart, findOperator(calculationPart), 0, calculationPart.length);
-
-                    console.log("The result is : " + result);
-
-                    calculation = result + calculation.substring(calculationPart.length, calculation.length);
-
-                    opeNbFromCalculation -= 1;
-                    multDivOpeFromCalculation -= 1;
-                }
-                // IF there is AT LEAST ONE ope before this one
-                else {
-                    // SELECT this ope
-                    thePreviousOpe = checkPreviousOperator(calculation, multOrDivOpeIndex);
-
-                    // CHECK if there is AT LEAST ONE ope after this one
-                    theNextOpe = checkNextOperator(calculation, multOrDivOpeIndex);
-
-                    // IF there is NOT an ope AFTER this one > SELECT a part of the calculation from thePreviousOpe+1 to the end > DO THE CALCULATION
-                    if (theNextOpe == -1) {
-
-                        calculationPart = calculation.substring(thePreviousOpe+1,calculation.length);
+                        calculationPart = calculation.substring(0,theNextOpe);
 
                         result = operation(calculationPart, findOperator(calculationPart), 0, calculationPart.length);
 
                         console.log("The result is : " + result);
 
-                        calculation = calculation.substring(0,multOrDivOpeIndex-1) + result.toString();
+                        calculation = result + calculation.substring(calculationPart.length, calculation.length);
 
                         opeNbFromCalculation -= 1;
                         multDivOpeFromCalculation -= 1;
                     }
-                    // IF there is AT LEAST ONE ope AFTER this one > SELECT a part of the calculation from thePreviousOpe+1 to theNextOpe > DO THE CALCULATION
+                    // IF there is AT LEAST ONE ope before this one
                     else {
+                        // SELECT this ope
+                        thePreviousOpe = checkPreviousOperator(calculation, multOrDivOpeIndex);
+
+                        // CHECK if there is AT LEAST ONE ope after this one
+                        theNextOpe = checkNextOperator(calculation, multOrDivOpeIndex);
+
+                        // IF there is NOT an ope AFTER this one > SELECT a part of the calculation from thePreviousOpe+1 to the end > DO THE CALCULATION
+                        if (theNextOpe == -1) {
+
+                            calculationPart = calculation.substring(thePreviousOpe+1,calculation.length);
+
+                            result = operation(calculationPart, findOperator(calculationPart), 0, calculationPart.length);
+
+                            console.log("The result is : " + result);
+
+                            calculation = calculation.substring(0,multOrDivOpeIndex-1) + result.toString();
+
+                            opeNbFromCalculation -= 1;
+                            multDivOpeFromCalculation -= 1;
+                        }
+                        // IF there is AT LEAST ONE ope AFTER this one > SELECT a part of the calculation from thePreviousOpe+1 to theNextOpe > DO THE CALCULATION
+                        else {
+                            
+                            calculationPart = calculation.substring(thePreviousOpe+1,theNextOpe);
+
+                            result = operation(calculationPart, findOperator(calculationPart), 0, calculationPart.length);
+
+                            console.log("The result is : " + result);
+
+                            calculation = calculation.substring(0,multOrDivOpeIndex-1) + result.toString() + calculation.substring(theNextOpe, calculation.length);
+
+                            opeNbFromCalculation -= 1;
+                            multDivOpeFromCalculation -= 1;
+                        }
                         
-                        calculationPart = calculation.substring(thePreviousOpe+1,theNextOpe);
-
-                        result = operation(calculationPart, findOperator(calculationPart), 0, calculationPart.length);
-
-                        console.log("The result is : " + result);
-
-                        calculation = calculation.substring(0,multOrDivOpeIndex-1) + result.toString() + calculation.substring(theNextOpe, calculation.length);
-
-                        opeNbFromCalculation -= 1;
-                        multDivOpeFromCalculation -= 1;
                     }
-                    
                 }
             }
         }
     }
+    return result;
 }
-console.log("end");
-
 
