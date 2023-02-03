@@ -14,8 +14,10 @@ ac.onclick = function() {
 // When we press the point button, this value is added to the calculation
 let point = document.getElementById("point");
 point.onclick = function() {
-    calculation += point.value;
-    input.value = calculation;
+    if (calculation[calculation.length-1] != ".") {
+        calculation += point.value.toString();
+        input.value = calculation;
+    }
 }
 
 let calculation = "";
@@ -31,11 +33,29 @@ for (let i=0; i<nbCollection.length; i++) {
     opeAndNbCollection.push(nbCollection[i]);
 }
 
+let calculationArray;
 // When we press the operators button or the numbers button, their value is added to the calculation
 for (let i=0; i<opeAndNbCollection.length; i++) {
     opeAndNbCollection[i].onclick = function() {
-        calculation += opeAndNbCollection[i].value;
-        input.value = calculation;
+        // If the button pressed is an ope > check if there is not an other ope at the end of the calculation
+        if (["+","-","*","/"].includes(opeAndNbCollection[i].value)) {
+            // If there is an ope at the end of the calculation > replace the previous ope by the new one
+            if (["+","-","*","/"].includes(calculation[calculation.length-1])) {
+                calculationArray = calculation.split("");
+                calculationArray[calculationArray.length-1] = opeAndNbCollection[i].value.toString();
+                calculation = calculationArray.join("");
+                input.value = calculation;
+            }
+            else {
+                calculation += opeAndNbCollection[i].value.toString();
+                input.value = calculation;
+            }
+        }
+        else {
+            calculation += opeAndNbCollection[i].value.toString();
+            input.value = calculation;
+        }
+        
     }
 }
 
